@@ -19,6 +19,11 @@ public class RentACatImpl implements RentACat {
 
 	public boolean returnCat(int id) {
 		// TODO
+		if(catExists(id) && !catAvailable(id)){
+			Cat c = getCat(id);
+			c.returnCat();
+			return true;
+		}
 		return false;
 	}
 
@@ -34,7 +39,13 @@ public class RentACatImpl implements RentACat {
 
 	public boolean rentCat(int id) {
 		// TODO
+		if(catExists(id) && catAvailable(id)){
+			Cat c = getCat(id);
+			c.rentCat();
+			return true;
+		}
 		return false;
+		
 	}
 
 	/**
@@ -49,7 +60,15 @@ public class RentACatImpl implements RentACat {
 
 	public String listCats() {
 		// TODO
-		return "WRITE CODE FOR THIS";
+		String catList = "";
+		if (cats.size()!=0 && cats!=null){
+			for(Cat cat:cats){
+				if(!cat.getRented()){
+					catList += cat.toString()+"\n";
+				}
+			}
+		}
+		return catList;
 	}
 
 	/**
@@ -63,6 +82,14 @@ public class RentACatImpl implements RentACat {
 
 	public boolean catExists(int id) {
 		// TODO
+		if (cats == null || cats.size() == 0) {
+			return false;
+		}
+		for (Cat c : cats) {
+			if (c.getId() == id) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -172,7 +199,7 @@ public class RentACatImpl implements RentACat {
 				case 2:
 					validCat = false;
 					int catIdToRent;
-					while (!validCat) {
+					while (!validCat) { /*  INFINITE LOOP DETECTED ON ALL CATS RENTED */
 						System.out.print("Rent which cat? > ");
 						try {
 							catIdToRent = sc.nextInt();
